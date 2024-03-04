@@ -1,0 +1,9 @@
+package br.com.msfreitas.webframework;
+
+public class WebFrameworkTestApplication {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	}
+
+}
