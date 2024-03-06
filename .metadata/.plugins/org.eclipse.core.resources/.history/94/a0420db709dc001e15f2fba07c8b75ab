@@ -1,0 +1,5 @@
+package br.com.msfreitas.webframework.explorer;
+
+public class ClassExplorer {
+
+}
