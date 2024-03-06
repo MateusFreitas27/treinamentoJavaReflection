@@ -1,0 +1,21 @@
+package br.com.msfreitas.webframework.web;
+
+import java.io.File;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.startup.Tomcat;
+
+public class WebFrameworkWebApplication {
+	public static void run() {
+		Tomcat tomcat = new Tomcat();
+		Connector connector = new Connector();
+		connector.setPort(8080);
+		tomcat.setConnector(connector);
+		
+		
+		//contexto olhando a raiz da aplicação
+		Context context = tomcat.addContext("", new File(".").getAbsolutePath());
+		
+	}
+}

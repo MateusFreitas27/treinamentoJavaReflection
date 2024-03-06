@@ -1,0 +1,14 @@
+package br.com.msfreitas.webframework.web;
+
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.startup.Tomcat;
+
+public class WebFrameworkWebApplication {
+	public static void run() {
+		Tomcat tomcat = new Tomcat();
+		Connector connector = new Connector();
+		connector.setPort(8080);
+		tomcat.setConnector(connector);
+		
+	}
+}

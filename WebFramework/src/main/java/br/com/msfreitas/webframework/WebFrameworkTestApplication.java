@@ -1,9 +1,11 @@
 package br.com.msfreitas.webframework;
 
+import br.com.msfreitas.webframework.web.WebFrameworkWebApplication;
+
 public class WebFrameworkTestApplication {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		WebFrameworkWebApplication.run();
 	}
 
 }

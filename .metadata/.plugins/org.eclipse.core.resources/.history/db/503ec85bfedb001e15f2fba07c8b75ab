@@ -1,0 +1,5 @@
+package br.com.msfreitas.webframework.web;
+
+public class WebFrameworkWebApplication {
+
+}
