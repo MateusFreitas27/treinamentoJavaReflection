@@ -11,14 +11,8 @@ import br.com.msfreitas.webframework.util.WebFrameworkLogger;
 public class WebFrameworkWebApplication {
 	public static void run() {
 		//desligar todos os logs do apache tomcat
-		java.util.logging.Logger.getLogger("org.apache").setLevel(java.util.logging.Level.OFF);
-		long ini, fim;
-		
-		WebFrameworkLogger.showBanner();
-		
+		java.util.logging.Logger.getLogger("org.apache").setLevel(java.util.logging.Level.OFF);;
 		try {
-			ini = System.currentTimeMillis();
-			
 			WebFrameworkLogger.log("Embeded Web Container", "Iniciando WebFrameworkWebApplication");
 			Tomcat tomcat = new Tomcat();
 			Connector connector = new Connector();
@@ -35,9 +29,6 @@ public class WebFrameworkWebApplication {
 			
 			//tudo que digitar na URL vai cair nesse ponto
 			context.addServletMappingDecoded("/*", "WebFrameworkDispatcherservlet");
-			
-			fim = System.currentTimeMillis();
-			WebFrameworkLogger.log("Embeded Web Container", "Tomcat iniciado em "+ (double)(fim - ini) +" ms");
 			
 			//inicialiazando
 			tomcat.start();

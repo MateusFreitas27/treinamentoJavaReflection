@@ -13,9 +13,6 @@ public class WebFrameworkWebApplication {
 		//desligar todos os logs do apache tomcat
 		java.util.logging.Logger.getLogger("org.apache").setLevel(java.util.logging.Level.OFF);
 		long ini, fim;
-		
-		WebFrameworkLogger.showBanner();
-		
 		try {
 			ini = System.currentTimeMillis();
 			
@@ -35,9 +32,6 @@ public class WebFrameworkWebApplication {
 			
 			//tudo que digitar na URL vai cair nesse ponto
 			context.addServletMappingDecoded("/*", "WebFrameworkDispatcherservlet");
-			
-			fim = System.currentTimeMillis();
-			WebFrameworkLogger.log("Embeded Web Container", "Tomcat iniciado em "+ (double)(fim - ini) +" ms");
 			
 			//inicialiazando
 			tomcat.start();
