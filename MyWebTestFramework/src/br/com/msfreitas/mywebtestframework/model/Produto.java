@@ -50,6 +50,6 @@ public class Produto {
 	
 	@Override
 	public String toString() {
-		return "Produto [id=" + this.id + ", nome = " + this.nome + ", preco = " + this.valor + ", linkFoto = " + this.linkFoto + "]";
+		return "Produto [ id = " + this.id + ", nome = " + this.nome + ", preco = " + this.valor + ", linkFoto = " + this.linkFoto + "]";
 	}
 }
