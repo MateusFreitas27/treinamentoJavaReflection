@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -11,7 +12,9 @@ import com.google.gson.Gson;
 
 import br.com.msfreitas.webframework.datastructures.ControllerInstances;
 import br.com.msfreitas.webframework.datastructures.ControllerMap;
+import br.com.msfreitas.webframework.datastructures.DependencyInjectionMap;
 import br.com.msfreitas.webframework.datastructures.RequestControllerData;
+import br.com.msfreitas.webframework.datastructures.ServiceImplementationMap;
 import br.com.msfreitas.webframework.util.WebFrameworkLogger;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -49,6 +52,8 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
 				WebFrameworkLogger.log("WebFrameworkDispatcherServlet", "Criando uma nova instancia da controladora");
 				controller = Class.forName(data.controllerClass).getDeclaredConstructor().newInstance();
 				ControllerInstances.instace.put(data.controllerClass, controller);
+				
+				injectDependencies(controller);
 			}
 
 			// precisamos extrair o método desta classe - ou seja o método que vai atender a
@@ -94,6 +99,34 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
 		}
 	}
 	
+	private void injectDependencies(Object controller) throws Exception {
+		//ver apenas os campos anotados por Inject
+				for(Field attr : controller.getClass().getDeclaredFields()) {
+					String attrTipo = attr.getType().getName();
+					WebFrameworkLogger.log("WebFrameworkDispatcherServlet", "Injetar " + attr.getName() + " do tipo " + attrTipo);
+					Object serviceImpl;
+					if(DependencyInjectionMap.objects.get(attrTipo)== null) {
+						//tem declaração da interface?
+						String implType = ServiceImplementationMap.implementations.get(attrTipo);
+						if(implType != null) {
+							WebFrameworkLogger.log("WebFrameworkDispatcherServlet", "Procurar Instâncias de " + implType);
+							serviceImpl = DependencyInjectionMap.objects.get(implType);
+							if(serviceImpl == null) {
+								WebFrameworkLogger.log("WebFrameworkDispatcherServlet", "Injetar novo objeto");
+								serviceImpl = Class.forName(implType).getDeclaredConstructor()
+										.newInstance();
+								DependencyInjectionMap.objects.put(implType, serviceImpl);
+							}
+							//atribuir essa instancia ao atributo anotado - Injeção de dependência.
+							attr.setAccessible(true);
+							attr.set(controller, serviceImpl);
+							WebFrameworkLogger.log("WebFrameworkDispatcherServlet", "Objeto injetado com sucesso!");
+						}
+					}
+					
+				}		
+	}
+
 	private String readBytesFromRequest(HttpServletRequest req) throws Exception {
 		StringBuilder stringBuilder = new StringBuilder();
 		String line;
@@ -103,4 +136,5 @@ public class WebFrameworkDispatcherServlet extends HttpServlet {
 		}
 		return stringBuilder.toString();
 	}
+	
 }

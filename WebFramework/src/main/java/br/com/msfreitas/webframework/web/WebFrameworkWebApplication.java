@@ -13,6 +13,7 @@ import br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod;
 import br.com.msfreitas.webframework.datastructures.ControllerMap;
 import br.com.msfreitas.webframework.datastructures.RequestControllerData;
+import br.com.msfreitas.webframework.datastructures.ServiceImplementationMap;
 import br.com.msfreitas.webframework.explorer.ClassExplorer;
 import br.com.msfreitas.webframework.util.WebFrameworkLogger;
 
@@ -69,6 +70,12 @@ public class WebFrameworkWebApplication {
 					if (classAnnotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkController")) {
 						WebFrameworkLogger.log("MetadataExplorer", "Found a controller: " + classe);
 						extractMethods(classe);
+					}else if (classAnnotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkService")){
+						WebFrameworkLogger.log("Metadata Explorer", "Found a Service Implementation: " + classe);
+						for(Class<?> interfaceWeb : Class.forName(classe).getInterfaces()) {
+							WebFrameworkLogger.log("Metadata Explorer", "     Class implements" + interfaceWeb.getName());
+							ServiceImplementationMap.implementations.put(interfaceWeb.getName(), classe);
+						}
 					}
 				}
 			}
