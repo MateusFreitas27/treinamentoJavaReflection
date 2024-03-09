@@ -37,6 +37,6 @@ public class HelloController {
 	
 	@WebFrameworkGetMethod("/retornavalor/{valor}")
 	public String retornaValor(@WebFrameworkPathVariable String valor) {
-		return "retornando o valor de parâmetro " + valor;
+		return "retornando o valor de parametro " + valor;
 	}
 }
