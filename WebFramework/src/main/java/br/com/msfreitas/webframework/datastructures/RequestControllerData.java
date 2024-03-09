@@ -5,6 +5,7 @@ public class RequestControllerData {
 	public String url;
 	public String controllerClass;
 	public String controllerMethod;
+	public String parameter;
 	
 	public RequestControllerData() {}
 
@@ -14,6 +15,17 @@ public class RequestControllerData {
 		this.url = url;
 		this.controllerClass = controllerClass;
 		this.controllerMethod = controllerMethod;
+		this.parameter = "";
+	}
+	
+	public RequestControllerData(String httpMethod, String url, String controllerClass, String controllerMethod,
+			String parameter) {
+		super();
+		this.httpMethod = httpMethod;
+		this.url = url;
+		this.controllerClass = controllerClass;
+		this.controllerMethod = controllerMethod;
+		this.parameter = parameter;
 	}
 
 	public String getHttpMethod() {
@@ -47,6 +59,13 @@ public class RequestControllerData {
 	public void setControllerMethod(String controllerMethod) {
 		this.controllerMethod = controllerMethod;
 	}
-	
-	
+
+	public String getParameter() {
+		return parameter;
+	}
+
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
+	}
+		
 }

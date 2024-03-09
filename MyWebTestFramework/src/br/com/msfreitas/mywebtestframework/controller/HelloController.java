@@ -5,6 +5,7 @@ import br.com.msfreitas.mywebtestframework.service.IService;
 import br.com.msfreitas.webframework.annotations.WebFrameworkBody;
 import br.com.msfreitas.webframework.annotations.WebFrameworkController;
 import br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod;
+import br.com.msfreitas.webframework.annotations.WebFrameworkPathVariable;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod;
 
 @WebFrameworkController
@@ -32,5 +33,10 @@ public class HelloController {
 	@WebFrameworkGetMethod("/injected")
 	public String chamadaCustom() {
 		return iService.chamadaCustom("Hello injected");
+	}
+	
+	@WebFrameworkGetMethod("/retornavalor/{valor}")
+	public String retornaValor(@WebFrameworkPathVariable String valor) {
+		return "retornando o valor de parâmetro " + valor;
 	}
 }

@@ -12,10 +12,12 @@ import org.apache.catalina.startup.Tomcat;
 import br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod;
 import br.com.msfreitas.webframework.datastructures.ControllerMap;
+import br.com.msfreitas.webframework.datastructures.MethodParam;
 import br.com.msfreitas.webframework.datastructures.RequestControllerData;
 import br.com.msfreitas.webframework.datastructures.ServiceImplementationMap;
 import br.com.msfreitas.webframework.explorer.ClassExplorer;
 import br.com.msfreitas.webframework.util.WebFrameworkLogger;
+import br.com.msfreitas.webframework.util.WebFrameworkUtil;
 
 public class WebFrameworkWebApplication {
 	public static void run(Class<?> sourceClass) {
@@ -80,7 +82,7 @@ public class WebFrameworkWebApplication {
 				}
 			}
 			for(RequestControllerData item : ControllerMap.values.values()) {
-				WebFrameworkLogger.log(" - ", "   " + item.getHttpMethod() + ":" + item.getUrl() + " [ " + item.getControllerClass() + "." + item.getControllerMethod() + "]");
+				WebFrameworkLogger.log(" - ", "   " + item.getHttpMethod() + ":" + item.getUrl() + " [ " + item.getControllerClass() + "." + item.getControllerMethod() + "]" + (item.getParameter().length() > 0 ? " - Expected parameter " + item.getParameter() : ""));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,21 +92,39 @@ public class WebFrameworkWebApplication {
 	private static void extractMethods(String className)throws Exception {
 		String httpMethod = "";
 		String path = "";
+		String parameter = "";
 		
 		//recuperar todos os metodos da classe
 		for(Method method: Class.forName(className).getDeclaredMethods()) {
+			parameter = "";
 			//WebFrameworkLogger.log(" - ", method.getName());
 			for(Annotation annotation : method.getAnnotations()) {
 				if (annotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod")) {
 					httpMethod = "GET";
 					path = ((WebFrameworkGetMethod)annotation).value();
+					//verifica se existe parametro
+					MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+					if (methodParam != null) {
+						path = methodParam.getMethod();
+						if (methodParam.getParam() != null) {
+							parameter = methodParam.getParam();
+						}
+					}
 				} else if (annotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod")) {
 					httpMethod = "POST";
 					path = ((WebFrameworkPostMethod)annotation).value();
+					//verifica se existe parametro
+					MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+					if (methodParam != null) {
+						path = methodParam.getMethod();
+						if (methodParam.getParam() != null) {
+							parameter = methodParam.getParam();
+						}
+					}
 				}
 			}
 			//WebFrameworkLogger.log(" - chave: ", httpMethod + path);
-			RequestControllerData getData = new RequestControllerData(httpMethod, path, className, method.getName());
+			RequestControllerData getData = new RequestControllerData(httpMethod, path, className, method.getName(), parameter);
 			ControllerMap.values.put(httpMethod + path, getData);
 		}
 	}
