@@ -9,8 +9,10 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
+import br.com.msfreitas.webframework.annotations.WebFrameworkDeleteMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod;
+import br.com.msfreitas.webframework.annotations.WebFrameworkPutMethod;
 import br.com.msfreitas.webframework.datastructures.ControllerMap;
 import br.com.msfreitas.webframework.datastructures.MethodParam;
 import br.com.msfreitas.webframework.datastructures.RequestControllerData;
@@ -113,6 +115,28 @@ public class WebFrameworkWebApplication {
 				} else if (annotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod")) {
 					httpMethod = "POST";
 					path = ((WebFrameworkPostMethod)annotation).value();
+					//verifica se existe parametro
+					MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+					if (methodParam != null) {
+						path = methodParam.getMethod();
+						if (methodParam.getParam() != null) {
+							parameter = methodParam.getParam();
+						}
+					}
+				} else if (annotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkPutMethod")) {
+					httpMethod = "PUT";
+					path = ((WebFrameworkPutMethod)annotation).value();
+					//verifica se existe parametro
+					MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
+					if (methodParam != null) {
+						path = methodParam.getMethod();
+						if (methodParam.getParam() != null) {
+							parameter = methodParam.getParam();
+						}
+					}
+				} else if (annotation.annotationType().getName().equals("br.com.msfreitas.webframework.annotations.WebFrameworkDeleteMethod")) {
+					httpMethod = "DELETE";
+					path = ((WebFrameworkDeleteMethod)annotation).value();
 					//verifica se existe parametro
 					MethodParam methodParam = WebFrameworkUtil.convertURI2MethodParam(path);
 					if (methodParam != null) {

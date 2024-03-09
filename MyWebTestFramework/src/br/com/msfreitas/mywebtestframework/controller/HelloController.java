@@ -4,9 +4,11 @@ import br.com.msfreitas.mywebtestframework.model.Produto;
 import br.com.msfreitas.mywebtestframework.service.IService;
 import br.com.msfreitas.webframework.annotations.WebFrameworkBody;
 import br.com.msfreitas.webframework.annotations.WebFrameworkController;
+import br.com.msfreitas.webframework.annotations.WebFrameworkDeleteMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkGetMethod;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPathVariable;
 import br.com.msfreitas.webframework.annotations.WebFrameworkPostMethod;
+import br.com.msfreitas.webframework.annotations.WebFrameworkPutMethod;
 
 @WebFrameworkController
 public class HelloController {
@@ -38,5 +40,15 @@ public class HelloController {
 	@WebFrameworkGetMethod("/retornavalor/{valor}")
 	public String retornaValor(@WebFrameworkPathVariable String valor) {
 		return "retornando o valor de parametro " + valor;
+	}
+	
+	@WebFrameworkPutMethod("/atualizarproduto")
+	public String atualizarProduto(@WebFrameworkBody Produto produtoAtualizado) {
+		return "Produto atualizado com sucesso!";
+	}
+	
+	@WebFrameworkDeleteMethod("/removerproduto/{id}")
+	public String deletarProduto(@WebFrameworkPathVariable Integer id) {
+		return "Produto " + id + " removido com sucesso!";
 	}
 }
